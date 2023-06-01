@@ -1,0 +1,68 @@
+package software
+public
+	process Controller
+		features
+			video_from_camera: in data port;
+			motion_in: in event port;
+			magnetic_in: in event port;
+			camera_out: out event port;
+			alarm_out: out event port;
+	end Controller;
+
+	process implementation Controller.with_threads
+		subcomponents
+			this_thread_motion: thread ReadMotion.impl;
+			this_thread_magnetic: thread ReadMagnetic.impl;
+			this_thread_control: thread ControlRules.impl;
+			this_thread_video: thread ProcessVideo.impl;
+
+		connections
+			motion_thread_conn: port motion_in -> this_thread_motion.motion_in;
+			magnetic_thread_conn: port magnetic_in -> this_thread_magnetic.magnetic_in;
+			motion_control_conn: port this_thread_motion.motion_out -> this_thread_control.motion_in;
+			magnetic_control_conn: port this_thread_magnetic.magnetic_out -> this_thread_control.magnetic_in;
+			camera_control_conn: port this_thread_control.camera_out -> camera_out;
+			alarm_control_conn: port this_thread_control.alarm_out -> alarm_out;
+			video_conn: port video_from_camera -> this_thread_video.video_in;
+
+	end Controller.with_threads;
+	
+	
+	thread ReadMotion
+	features
+		motion_in: in event port;
+		motion_out: out event port;
+
+	end ReadMotion;
+
+	thread implementation ReadMotion.impl
+	end ReadMotion.impl;
+
+	thread ReadMagnetic
+		features
+			magnetic_in: in event port;
+			magnetic_out: out event port;
+	end ReadMagnetic;
+
+	thread implementation ReadMagnetic.impl
+	end ReadMagnetic.impl;
+
+	thread ControlRules
+		features
+			motion_in: in event port;
+			magnetic_in: in event port;
+			camera_out: out event port;
+			alarm_out: out event port;
+	end ControlRules;
+
+	thread implementation ControlRules.impl
+	end ControlRules.impl;
+
+	thread ProcessVideo
+		features
+			video_in: in data port;
+	end ProcessVideo;
+
+	thread implementation ProcessVideo.impl
+	end ProcessVideo.impl;
+end software;

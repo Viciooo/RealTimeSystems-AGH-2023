@@ -1,0 +1,22 @@
+package hardware
+public
+	processor MainProcessor
+		features
+			bus_access: requires bus access HWConnection;
+	end MainProcessor;
+
+	processor implementation MainProcessor.impl
+		subcomponents
+			this_ram: memory Ram;
+	end MainProcessor.impl;
+
+	memory Ram
+	end Ram;
+
+	bus HWConnection
+	end HWConnection;
+
+	bus implementation HWConnection.impl
+
+	end HWConnection.impl;
+end hardware;

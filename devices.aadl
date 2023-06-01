@@ -1,0 +1,45 @@
+package devices
+public
+	with hardware;
+
+	device MotionSensor
+		features
+			motion_detected: out event port;
+			bus_access: requires bus access hardware::HWConnection;
+	end MotionSensor;
+
+	device implementation MotionSensor.impl
+
+	end MotionSensor.impl;
+
+	device MagneticAlarmSensor
+		features
+			alarm_set_off: out event port;
+			bus_access: requires bus access hardware::HWConnection;
+	end MagneticAlarmSensor;
+
+	device implementation MagneticAlarmSensor.impl
+
+	end MagneticAlarmSensor.impl;
+
+	device Camera
+		features
+			video_stream: out data port;
+			bus_access: requires bus access hardware::HWConnection;
+			camera_on_off: in event port;
+	end Camera;
+
+	device implementation Camera.impl
+
+	end Camera.impl;
+
+	device AlarmUnit
+		features
+			alarm_on_off: in event port;
+			bus_access: requires bus access hardware::HWConnection;
+	end AlarmUnit;
+
+	device implementation AlarmUnit.impl
+
+	end AlarmUnit.impl;
+end devices;
