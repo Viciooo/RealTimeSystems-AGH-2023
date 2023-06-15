@@ -1,11 +1,17 @@
 package devices
 public
 	with hardware;
+	with SEI;
 
 	device MotionSensor
 		features
 			motion_detected: out event port;
 			bus_access: requires bus access hardware::HWConnection;
+		properties
+			SEI::GrossWeight => 0.1kg;
+			Dispatch_Protocol => Periodic;
+			Period => 50ms;
+			SEI::MIPSBudget => 1.0 mips;
 	end MotionSensor;
 
 	device implementation MotionSensor.impl
@@ -16,6 +22,11 @@ public
 		features
 			alarm_set_off: out event port;
 			bus_access: requires bus access hardware::HWConnection;
+		properties
+			SEI::GrossWeight => 0.2kg;
+			Dispatch_Protocol => Periodic;
+			Period => 50ms;
+			SEI::MIPSBudget => 1.0 mips;
 	end MagneticAlarmSensor;
 
 	device implementation MagneticAlarmSensor.impl
@@ -27,6 +38,11 @@ public
 			video_stream: out data port;
 			bus_access: requires bus access hardware::HWConnection;
 			camera_on_off: in event port;
+		properties
+			SEI::GrossWeight => 0.5kg;
+			Dispatch_Protocol => Periodic;
+			Period => 100ms;
+			SEI::MIPSBudget => 1.0 mips;
 	end Camera;
 
 	device implementation Camera.impl
@@ -37,6 +53,11 @@ public
 		features
 			alarm_on_off: in event port;
 			bus_access: requires bus access hardware::HWConnection;
+		properties
+			SEI::GrossWeight => 0.2kg;
+			Dispatch_Protocol => Periodic;
+			Period => 10ms;
+			SEI::MIPSBudget => 1.0 mips;
 	end AlarmUnit;
 
 	device implementation AlarmUnit.impl
