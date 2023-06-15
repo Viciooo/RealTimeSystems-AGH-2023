@@ -1,8 +1,13 @@
 package hardware
 public
+	with SEI;
+
 	processor MainProcessor
 		features
 			bus_access: requires bus access HWConnection;
+	  	properties
+			SEI::MIPSCapacity => 10.0 mips;
+			SEI::GrossWeight => 0.2kg;
 	end MainProcessor;
 
 	processor implementation MainProcessor.impl
@@ -11,12 +16,22 @@ public
 	end MainProcessor.impl;
 
 	memory Ram
+		features
+			bus_access: requires bus access HWConnection;
+		properties
+			SEI::GrossWeight => 0.05kg;
 	end Ram;
+	
+	memory implementation Ram.impl
+	end Ram.impl;
+	
 
 	bus HWConnection
+		properties
+			SEI::GrossWeight => 0.1kg;
+			SEI::BandWidthCapacity => 2.0 MBytesps;
 	end HWConnection;
 
 	bus implementation HWConnection.impl
-
 	end HWConnection.impl;
 end hardware;
