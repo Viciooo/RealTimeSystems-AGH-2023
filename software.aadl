@@ -1,5 +1,7 @@
 package software
 public
+	with SEI;
+
 	process Controller
 		features
 			video_from_camera: in data port;
@@ -7,6 +9,8 @@ public
 			magnetic_in: in event port;
 			camera_out: out event port;
 			alarm_out: out event port;
+		properties
+			SEI::MIPSBudget => 5.0 mips;
 	end Controller;
 
 	process implementation Controller.with_threads
@@ -25,14 +29,20 @@ public
 			alarm_control_conn: port this_thread_control.alarm_out -> alarm_out;
 			video_conn: port video_from_camera -> this_thread_video.video_in;
 
-	end Controller.with_threads;
-	
-	
-	thread ReadMotion
-	features
-		motion_in: in event port;
-		motion_out: out event port;
 
+	end Controller.with_threads;
+
+	thread ReadMotion
+		features
+			motion_in: in event port;
+			motion_out: out event port;
+		  properties
+		    Dispatch_Protocol => Periodic;
+		    Dispatch_Offset => 	2ms;
+		    Deadline => 15ms;	
+		    Period => 20ms;
+		    Compute_Execution_Time => 0ms..2ms;	
+			SEI::MIPSBudget => 0.3 mips;
 	end ReadMotion;
 
 	thread implementation ReadMotion.impl
@@ -42,6 +52,13 @@ public
 		features
 			magnetic_in: in event port;
 			magnetic_out: out event port;
+	    properties
+		    Dispatch_Protocol => Periodic;
+		    Dispatch_Offset => 	2ms;
+		    Deadline => 15ms;	
+		    Period => 20ms;
+		    Compute_Execution_Time => 0ms..2ms;	
+		    SEI::MIPSBudget => 0.5 mips;
 	end ReadMagnetic;
 
 	thread implementation ReadMagnetic.impl
@@ -53,6 +70,13 @@ public
 			magnetic_in: in event port;
 			camera_out: out event port;
 			alarm_out: out event port;
+	    properties
+		    Dispatch_Protocol => Periodic;
+		    Dispatch_Offset => 	2ms;
+		    Deadline => 15ms;	
+		    Period => 20ms;
+		    Compute_Execution_Time => 0ms..2ms;	
+		    SEI::MIPSBudget => 0.5 mips;
 	end ControlRules;
 
 	thread implementation ControlRules.impl
@@ -61,6 +85,13 @@ public
 	thread ProcessVideo
 		features
 			video_in: in data port;
+	    properties
+		    Dispatch_Protocol => Periodic;
+		    Dispatch_Offset => 	2ms;
+		    Deadline => 15ms;	
+		    Period => 20ms;
+		    Compute_Execution_Time => 0ms..2ms;	
+		    SEI::MIPSBudget => 0.5 mips;
 	end ProcessVideo;
 
 	thread implementation ProcessVideo.impl
