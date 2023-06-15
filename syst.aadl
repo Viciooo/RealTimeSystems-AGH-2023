@@ -3,8 +3,12 @@ public
 	with devices;
 	with hardware;
 	with software;
+	with SEI;
 
 	system SecuritySystem
+		properties
+			SEI::MIPSCapacity => 20.0 mips;
+			SEI::WeightLimit => 3.5kg;
 	end SecuritySystem;
 
 	system implementation SecuritySystem.with_devices
@@ -17,6 +21,7 @@ public
 			this_controller: process software::Controller.with_threads;
 
 			this_bus: bus hardware::HWConnection.impl;
+			this_ram: memory hardware::Ram.impl;
 
 			this_processor: processor hardware::MainProcessor.impl;
 
@@ -32,8 +37,33 @@ public
 			bus_camera: bus access this_bus -> this_camera.bus_access;
 			bus_alarm: bus access this_bus -> this_alarm_unit.bus_access;
 
-			bus_processor: bus access this_bus -> this_processor.bus_access;
+			bus_ram: bus access this_bus <-> this_ram.bus_access;
 
+			bus_processor: bus access this_bus -> this_processor.bus_access;
+		properties
+			Actual_Memory_Binding => (reference (this_ram)) applies to this_motion_sensor;
+			Actual_Memory_Binding => (reference (this_ram)) applies to this_magnetic_alarm_sensor;
+			Actual_Memory_Binding => (reference (this_ram)) applies to this_camera;
+			Actual_Memory_Binding => (reference (this_ram)) applies to this_alarm_unit;
+			Actual_Memory_Binding => (reference (this_ram)) applies to this_controller;
+
+			Actual_Processor_Binding => (reference (this_processor)) applies to this_motion_sensor;
+			Actual_Processor_Binding => (reference (this_processor)) applies to this_magnetic_alarm_sensor;
+			Actual_Processor_Binding => (reference (this_processor)) applies to this_camera;
+			Actual_Processor_Binding => (reference (this_processor)) applies to this_alarm_unit;
+			Actual_Processor_Binding => (reference (this_processor)) applies to this_controller;
+
+			Actual_Connection_Binding => (reference (this_bus)) applies to motion_conn;
+			Actual_Connection_Binding => (reference (this_bus)) applies to magnetic_conn;
+			Actual_Connection_Binding => (reference (this_bus)) applies to camera_conn_out;
+			Actual_Connection_Binding => (reference (this_bus)) applies to alarm_conn;
+			Actual_Connection_Binding => (reference (this_bus)) applies to camera_conn_in;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_motion;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_magnetic;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_camera;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_alarm;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_ram;
+			Actual_Connection_Binding => (reference (this_bus)) applies to bus_processor;
 	end SecuritySystem.with_devices;
 
 	
